@@ -8,7 +8,7 @@ import (
 )
 
 type Repository interface {
-	CreateUser(ctx context.Context, us entities.User) (int32, error)
+	CreateUser(ctx context.Context, us entities.User) (uint32, error)
 }
 
 type service struct {
@@ -24,10 +24,10 @@ func NewService(rep Repository, logger log.Logger) *service {
 	}
 }
 
-func (s service) CreateUser(ctx context.Context, ent entities.User) (int32, error) {
+func (s service) CreateUser(ctx context.Context, ent entities.User) (uint32, error) {
 	usrID, err := s.repository.CreateUser(ctx, ent)
 	if err != nil {
-		return -1, err
+		return 0, err
 	}
 	return usrID, nil
 }
