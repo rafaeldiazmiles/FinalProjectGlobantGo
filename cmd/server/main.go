@@ -2,11 +2,17 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
+	"net"
 	"os"
+
+	_ "github.com/go-sql-driver/mysql"
+	"google.golang.org/grpc"
 
 	"github.com/go-kit/log"
 	"github.com/go-kit/log/level"
 	"github.com/rafaeldiazmiles/ProjectEssay/pkg/user"
+	"github.com/rafaeldiazmiles/ProjectEssay/proto"
 )
 
 func main() {
@@ -22,18 +28,36 @@ func main() {
 		)
 	}
 	level.Info(logger).Log("msg", "Service started")
-	defer level.Info(logger).Log("msg", "Service ended")
+	// defer level.Info(logger).Log("msg", "Service ended")
 
-	db, err := sql.Open("mysql", "root:password@tcp(127.0.01:5050)/projectDB")
+	db, err := sql.Open("mysql", "root:Password1*@tcp(127.0.01:3306)/users")
 	if err != nil {
 		level.Error(logger).Log("exit", err)
 		os.Exit(-1)
 	}
 	defer db.Close()
+	fmt.Print("Estoy aca")
+	repo := user.NewRepo(db, logger)
+	srv := user.NewService(repo, logger)
+	endP := user.MakeEndpoints(srv)
+	trnsp := user.NewGRPCServer(endP, logger)
 
-	{
-		repo := user.NewRepo(db, logger)
-		srv := user.NewService(repo, logger)
-		endP := user.MakeEndpoints(srv)
+	fmt.Print("Estoy aca en segundo lugar")
+
+	listener, err := net.Listen("tcp", ":50005")
+	if err != nil {
+		level.Error(logger).Log("error", err.Error())
+		os.Exit(-1)
+
 	}
+	fmt.Print("Estoy aca en tercer lugar")
+
+	// go func() {
+
+	baseServer := grpc.NewServer()
+	proto.RegisterUserServiceServer(baseServer, trnsp)
+	fmt.Print("Estoy aca en ultimo lugar")
+	baseServer.Serve(listener)
+	// }()
+
 }

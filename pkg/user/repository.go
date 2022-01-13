@@ -21,7 +21,7 @@ func NewRepo(sql *sql.DB, logger log.Logger) *SQLRepo {
 	}
 }
 
-func (repo *SQLRepo) CreateUser(ctx context.Context, us entities.User) (int32, error) {
+func (repo *SQLRepo) CreateUser(ctx context.Context, us entities.User) (uint32, error) {
 	return 0, nil
 
 }
