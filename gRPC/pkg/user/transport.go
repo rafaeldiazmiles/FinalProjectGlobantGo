@@ -2,9 +2,11 @@ package user
 
 import (
 	"context"
+	"errors"
 
 	gt "github.com/go-kit/kit/transport/grpc"
 	"github.com/go-kit/log"
+	"github.com/rafaeldiazmiles/FinalProjectGlobantGo/gRPC/pkg/entities"
 	"github.com/rafaeldiazmiles/FinalProjectGlobantGo/gRPC/pkg/proto"
 )
 
@@ -33,12 +35,15 @@ func (s *gRPCServer) CreateUser(ctx context.Context, req *proto.CreateUserReques
 }
 
 func decodeCreateUserRequest(_ context.Context, request interface{}) (interface{}, error) {
-	req := request.(*proto.CreateUserRequest)
-	return CreateUserRequest{
-		pwd:     req.Pwd,
-		name:    req.Name,
-		age:     req.Age,
-		addInfo: req.AddInfo}, nil
+	req, ok := request.(*proto.CreateUserRequest)
+	if !ok {
+		return nil, errors.New("invalid request type")
+	}
+	return entities.User{
+		Pwd:     req.Pwd,
+		Name:    req.Name,
+		Age:     req.Age,
+		AddInfo: req.AddInfo}, nil
 }
 
 func encodeCreateUserResponse(_ context.Context, response interface{}) (interface{}, error) {

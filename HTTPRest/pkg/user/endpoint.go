@@ -1,11 +1,11 @@
-package userhttp
+package user
 
 import (
 	"context"
 	"errors"
 
 	"github.com/go-kit/kit/endpoint"
-	"github.com/rafaeldiazmiles/FinalProjectGlobantGo/pkg/entities"
+	"github.com/rafaeldiazmiles/FinalProjectGlobantGo/HTTPRest/pkg/entities"
 )
 
 type HTTPCreateUserRequest struct {
@@ -24,13 +24,13 @@ type HTTPService interface {
 }
 
 type Endpoints struct {
-	CreateUs endpoint.Endpoint
+	CreateUser endpoint.Endpoint
 }
 
 func MakeEndpoints(s Service) *Endpoints {
 
 	return &Endpoints{
-		CreateUs: MakeCreateUserEndpoint(s),
+		CreateUser: MakeCreateUserEndpoint(s),
 	}
 }
 
@@ -42,19 +42,14 @@ func MakeCreateUserEndpoint(s Service) endpoint.Endpoint {
 			return nil, errors.New("invalid request type")
 		}
 
-		res, err := s.CreateUser(ctx, entities.User{
-			Name:    request.Name,
-			Pwd:     request.Pwd,
-			Age:     request.Age,
-			AddInfo: request.AddInfo,
-		})
+		res, err := s.CreateUser(ctx, request)
 
 		if err != nil {
 			return nil, err
 		}
 
 		return CreateUserResponse{
-			Id: res,
+			Id: res.Id,
 		}, nil
 
 	}

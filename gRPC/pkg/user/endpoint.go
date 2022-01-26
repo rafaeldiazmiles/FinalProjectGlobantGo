@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/go-kit/kit/endpoint"
-	"github.com/rafaeldiazmiles/FinalProjectGlobantGo/gRPC/pkg/entities" // "github.com/junereycasuga/gokit-grpc-demo/service"
+	"github.com/rafaeldiazmiles/FinalProjectGlobantGo/gRPC/pkg/entities"
 )
 
 // Service interface describes actions on Users
@@ -22,15 +22,6 @@ type Endpoints struct {
 	CreateUser endpoint.Endpoint
 }
 
-// CreateUserRequest struct holds the endpoint request definition
-type CreateUserRequest struct {
-	pwd     string
-	name    string
-	age     uint32
-	addInfo string
-	// parents []Parent   --> Para implementar cuando haya parents
-}
-
 // CreateUserResponse struct holds the endpoint response definition
 type CreateUserResponse struct {
 	id uint32
@@ -45,16 +36,11 @@ func MakeEndpoints(s Service) Endpoints {
 
 func makeCreateUserEndpoint(s Service) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (response interface{}, err error) {
-		req, ok := request.(CreateUserRequest)
+		req, ok := request.(entities.User)
 		if !ok {
 			return nil, err //Tengo que retornar un error custom
 		}
-		result, err := s.CreateUser(ctx, entities.User{
-			Pwd:     req.pwd,
-			Name:    req.name,
-			Age:     req.age,
-			AddInfo: req.addInfo,
-		})
+		result, err := s.CreateUser(ctx, req)
 		if err != nil {
 			return nil, err
 		}

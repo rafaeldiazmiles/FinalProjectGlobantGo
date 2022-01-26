@@ -1,4 +1,4 @@
-package userhttp
+package user
 
 import (
 	"context"
@@ -7,10 +7,9 @@ import (
 
 	transport "github.com/go-kit/kit/transport/http"
 	"github.com/gorilla/mux"
-	"github.com/rafaeldiazmiles/FinalProjectGlobantGo/pkg/user"
 )
 
-func NewHTTPServer(endpoint user.Endpoints) http.Handler {
+func NewHTTPServer(endpoint *Endpoints) http.Handler {
 	router := mux.NewRouter()
 
 	router.Methods("POST").Path("/api").Handler(transport.NewServer(
@@ -24,7 +23,7 @@ func NewHTTPServer(endpoint user.Endpoints) http.Handler {
 
 func createDecodeReq(_ context.Context, r *http.Request) (interface{}, error) {
 
-	var request user.CreateUserRequest
+	var request CreateUserRequest
 	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
 		return nil, err

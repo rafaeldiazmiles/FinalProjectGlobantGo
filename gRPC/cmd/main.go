@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"net"
 	"os"
 
@@ -28,7 +27,6 @@ func main() {
 		)
 	}
 	level.Info(logger).Log("msg", "Service started")
-	// defer level.Info(logger).Log("msg", "Service ended")
 
 	db, err := sql.Open("mysql", "root:Password1*@tcp(127.0.01:3306)/users")
 	if err != nil {
@@ -36,28 +34,20 @@ func main() {
 		os.Exit(-1)
 	}
 	defer db.Close()
-	fmt.Print("Estoy aca")
 	repo := user.NewRepo(db, logger)
 	srv := user.NewService(repo, logger)
 	endP := user.MakeEndpoints(srv)
 	trnsp := user.NewGRPCServer(endP, logger)
 
-	fmt.Print("Estoy aca en segundo lugar")
-
-	listener, err := net.Listen("tcp", ":50005")
+	listener, err := net.Listen("tcp", ":50051")
 	if err != nil {
 		level.Error(logger).Log("error", err.Error())
 		os.Exit(-1)
 
 	}
-	fmt.Print("Estoy aca en tercer lugar")
-
-	// go func() {
 
 	baseServer := grpc.NewServer()
 	proto.RegisterUserServiceServer(baseServer, trnsp)
-	fmt.Print("Estoy aca en ultimo lugar")
 	baseServer.Serve(listener)
-	// }()
 
 }
