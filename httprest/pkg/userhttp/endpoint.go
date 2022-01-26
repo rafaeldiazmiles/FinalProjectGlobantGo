@@ -1,25 +1,25 @@
-package user
+package userhttp
 
 import (
 	"context"
 	"errors"
 
 	"github.com/go-kit/kit/endpoint"
-	"github.com/rafaeldiazmiles/ProjectEssay/pkg/entities"
+	"github.com/rafaeldiazmiles/FinalProjectGlobantGo/pkg/entities"
 )
 
-type CreateUserRequest struct {
+type HTTPCreateUserRequest struct {
 	Name    string
 	Pwd     string
 	Age     int
 	AddInfo string
 }
 
-type CreateUserResponse struct {
+type HTTPCreateUserResponse struct {
 	Id uint32
 }
 
-type Service interface {
+type HTTPService interface {
 	CreateUser(ctx context.Context, us entities.User) (uint32, error)
 }
 

@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/go-kit/log"
-	"github.com/rafaeldiazmiles/ProjectEssay/pkg/entities"
+	"github.com/rafaeldiazmiles/FinalProjectGlobantGo/pkg/entities"
 )
 
 type Repository interface {

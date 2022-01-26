@@ -1,11 +1,11 @@
-package user
+package userhttp
 
 import (
 	"context"
 
 	gokitlog "github.com/go-kit/log"
 	"github.com/go-kit/log/level"
-	"github.com/rafaeldiazmiles/ProjectEssay/proto"
+	"github.com/rafaeldiazmiles/FinalProjectGlobantGo/proto"
 	"google.golang.org/grpc"
 )
 

@@ -7,12 +7,12 @@ import (
 	"os"
 
 	_ "github.com/go-sql-driver/mysql"
-	"google.golang.org/grpc"
+	grpc "google.golang.org/grpc"
 
 	"github.com/go-kit/log"
 	"github.com/go-kit/log/level"
-	"github.com/rafaeldiazmiles/ProjectEssay/pkg/user"
-	"github.com/rafaeldiazmiles/ProjectEssay/proto"
+	"github.com/rafaeldiazmiles/FinalProjectGlobantGo/pkg/user"
+	"github.com/rafaeldiazmiles/FinalProjectGlobantGo/proto"
 )
 
 func main() {

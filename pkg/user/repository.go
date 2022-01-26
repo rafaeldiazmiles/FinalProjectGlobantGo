@@ -1,4 +1,4 @@
-//go:generate mockgen -destination=repositories_mocks_test.go -package=rocket https://github.com/rafaeldiazmiles/ProjectEssay Users
+//go:generate mockgen -destination=repositories_mocks_test.go -package=rocket https://github.com/rafaeldiazmiles/FinalProjectGlobantGo/ Users
 package user
 
 import (
@@ -6,78 +6,61 @@ import (
 	"database/sql"
 
 	"github.com/go-kit/log"
-	"github.com/rafaeldiazmiles/ProjectEssay/pkg/entities"
+	"github.com/go-kit/log/level"
+	"github.com/rafaeldiazmiles/FinalProjectGlobantGo/pkg/entities"
 )
 
+var CreateUserQuery string = "INSERT INTO USER (name, pwd, age, add_info) VALUES (?,?,?,?,?)"
+
 type SQLRepo struct {
-	db     *sql.DB
-	logger log.Logger
+	DB     *sql.DB
+	Logger log.Logger
 }
 
 func NewRepo(sql *sql.DB, logger log.Logger) *SQLRepo {
 	return &SQLRepo{
-		db:     sql,
-		logger: log.With(logger, "error", "db"),
+		DB:     sql,
+		Logger: log.With(logger, "error", "db"),
 	}
 }
 
 func (repo *SQLRepo) CreateUser(ctx context.Context, us entities.User) (uint32, error) {
+
+	repo.Logger.Log(repo.Logger, "Repository method", "Create user")
+	stmt, err := repo.DB.PrepareContext(ctx, CreateUserQuery)
+	if err != nil {
+		level.Error(repo.Logger).Log(err)
+		return 0, err
+	}
+	defer stmt.Close()
+	res, err := stmt.ExecContext(ctx, entities.User.Name, entities.User.Pwd, entities.User.Age, entities.User.AddInfo)
+	if err != nil {
+		level.Error(repo.Logger).Log(err)
+		return 0, err
+	}
+
 	return 0, nil
 
 }
 
-// // NewDatabase - returns a pointer to a database object
-// func NewDatabase() (*gorm.DB, error) {
-// 	fmt.Println("Setting up new database connection")
+// func (repo *sqlRepo) CreateUser(ctx context.Context, user entities.User, newId string) (string, error) {
 
-// 	dbUsername := "rafaeldiaz" //os.Getenv("DB_USERNAME")
-// 	dbPassword := "postgres" //os.Getenv("DB_PASSWORD")
-// 	dbHost := "172.17.0.2"   //os.Getenv("DB_HOST") //172.17.0.2
-// 	dbTable := "comments"    //os.Getenv("DB_TABLE")
-// 	dbPort := "5432"         //os.Getenv("DB_PORT") //5432
+// 	repo.Logger.Log(repo.Logger, "Repository method", "Create user")
 
-// 	// connectString := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable", dbHost, dbPort, dbUsername, dbTable, dbPassword)
-
-// 	connectString := fmt.Sprintf("host=%s port=%s dbname=%s password=%s user=%s sslmode=disable", dbHost, dbPort, dbTable, dbPassword, dbUsername)
-
-// 	db, err := gorm.Open("postgres", connectString)
+// 	stmt, err := repo.DB.PrepareContext(ctx, utils.CreateUserQuery)
 // 	if err != nil {
-// 		return db, err
+// 		level.Error(repo.Logger).Log(err)
+// 		return "", err
 // 	}
 
-// 	if err := db.DB().Ping(); err != nil {
-// 		return db, err
+// 	defer stmt.Close()
+// 	res, err := stmt.ExecContext(ctx, user.Name, newId, user.Pass, user.Age, user.Email)
+// 	if err != nil {
+// 		level.Error(repo.Logger).Log(err)
+// 		return "", err
 // 	}
 
-// 	return db, nil
+// 	repo.Logger.Log(repo.Logger, res, "rows affected")
+
+// 	return newId, nil
 // }
-
-// // // Service - our Users service, responsible for updating the Users DB
-// // type Service struct {
-// // 	User Users
-// // }
-
-// // New - returns a new instance of our Users service
-// // func New(user Users) Service {
-// // 	return Service{
-// // 		User: user,
-// // 	}
-// // }
-
-// // // GetUser - retrieves a user based on the ID from the
-// // func (s Service) GetUser(ctx context.Context, id int32) (User, error) {
-// // 	usr, err := s.User.GetUser(id)
-// // 	if err != nil {
-// // 		return User{}, err
-// // 	}
-// // 	return usr, nil
-// // }
-
-// // // DeleteRocket - deletes a rocket from our inventory
-// // func (s Service) DeleteRocket(ctx context.Context, id int32) error {
-// // 	err := s.User.DeleteUser(id)
-// // 	if err != nil {
-// // 		return err
-// // 	}
-// // 	return nil
-// // }

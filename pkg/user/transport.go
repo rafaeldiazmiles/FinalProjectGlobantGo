@@ -5,7 +5,7 @@ import (
 
 	gt "github.com/go-kit/kit/transport/grpc"
 	"github.com/go-kit/log"
-	"github.com/rafaeldiazmiles/ProjectEssay/proto"
+	"github.com/rafaeldiazmiles/FinalProjectGlobantGo/proto"
 )
 
 type gRPCServer struct {

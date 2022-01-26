@@ -4,8 +4,7 @@ import (
 	"context"
 
 	"github.com/go-kit/kit/endpoint"
-	"github.com/rafaeldiazmiles/ProjectEssay/pkg/entities"
-	// "github.com/junereycasuga/gokit-grpc-demo/service"
+	"github.com/rafaeldiazmiles/FinalProjectGlobantGo/pkg/entities" // "github.com/junereycasuga/gokit-grpc-demo/service"
 )
 
 // Service interface describes actions on Users

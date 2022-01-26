@@ -1,4 +1,4 @@
-package user
+package userhttp
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 
 	transport "github.com/go-kit/kit/transport/http"
 	"github.com/gorilla/mux"
-	"github.com/rafaeldiazmiles/ProjectEssay/pkg/user"
+	"github.com/rafaeldiazmiles/FinalProjectGlobantGo/pkg/user"
 )
 
 func NewHTTPServer(endpoint user.Endpoints) http.Handler {
@@ -19,6 +19,7 @@ func NewHTTPServer(endpoint user.Endpoints) http.Handler {
 		encodeCreateUserResp,
 	),
 	)
+	return router
 }
 
 func createDecodeReq(_ context.Context, r *http.Request) (interface{}, error) {

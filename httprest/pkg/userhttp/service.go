@@ -1,4 +1,4 @@
-package user
+package userhttp
 
 import (
 	"context"
