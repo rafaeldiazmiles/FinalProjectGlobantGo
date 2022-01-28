@@ -5,18 +5,9 @@ option go_package = "github.com/rafaeldiazmiles/FinalProjectGlobantGo/gRPC/pkg/p
 package proto;
 
 
-// message User {
-//     int32 Id = 1;
-//     string pwd = 3;
-//     string name = 5;
-//     int32 age = 7;
-//     string addInfo = 9;
-//     // repeated string parent = 11;
-// }
-
-
 service UserService{
     rpc CreateUser(CreateUserRequest) returns (CreateUserResponse){}
+    rpc GetUser(GetUserRequest) returns (GetUserResponse){}
 }
 
 message Status {
@@ -33,5 +24,16 @@ message CreateUserRequest {
 message CreateUserResponse {
     uint32 id = 1;
     Status status = 3;
+}
+
+message GetUserRequest {
+    uint32 id = 1;
+}
+
+message GetUserResponse {
+    string name = 1;
+    uint32 age = 3;
+    string addInfo = 5;
+    Status status = 7;
 }
 
